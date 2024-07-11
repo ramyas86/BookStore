@@ -80,7 +80,7 @@ const Book = sequelize.define('Book', {
     }
   },
   publication_date: {
-    type: DataTypes.DATE,
+    type: DataTypes.DATEONLY,
     allowNull: false,
     validate: {
       isDate: {
@@ -88,24 +88,28 @@ const Book = sequelize.define('Book', {
       }
     }
   },
+  imagePath: {
+    type: DataTypes.STRING,   // Storing image paths
+    allowNull: true // or false based on whether imagePath is required
+  },
 },
 {
-  hooks: {
-    beforeCreate: (book, options) => {
-      // trim values and check for empty
-      // does user exists
-      // Does Genre exist
+  // hooks: {
+  //   beforeCreate: (book, options) => {
+  //     // trim values and check for empty
+  //     // does user exists
+  //     // Does Genre exist
 
 
-      console.log('Before creating a book:', book)
-    },
-    beforeUpdate: (book, options) => {
-      console.log('Before creating a book:', book)
-      console.log(book);
-      console.log(options);
+  //     console.log('Before creating a book:', book)
+  //   },
+  //   beforeUpdate: (book, options) => {
+  //     console.log('Before creating a book:', book)
+  //     console.log(book);
+  //     console.log(options);
 
-    }
-  }
+  //   }
+  // }
 });
 
 Book.belongsTo(Author, { foreignKey: 'author_id' });

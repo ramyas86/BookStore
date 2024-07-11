@@ -1,6 +1,7 @@
 const Book = require('../models/book');
 const Author = require('../models/author');
 const Genre = require('../models/genre');
+const { Op } = require('sequelize');
 const formatName = require('../utils/formatName');
 
 exports.getBooks = async (req, res) => {
@@ -66,5 +67,26 @@ exports.deleteBook = async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+};
+
+exports.searchBooks = async (req, res) => {
+  console.log('Searching books by title:', req.query.query);
+  try {
+    const { query } = req.query;
+    const books = await Book.findAll({
+      include: [Author, Genre],
+      where: {
+        [Op.or] : [
+          { title: { [Op.like]: `%${query}%` } },
+          { '$Author.name$': { [Op.like]: `%${query}%` } },
+          { '$Genre.genre_name$': { [Op.like]: `%${query}%` } },
+        ]
+      },
+    });
+    res.json(books);
+  } catch (error) {
+    console.error('Error searching books by title:', error);
+    res.status(500).json({ message: 'Error searching books by title' });
   }
 };

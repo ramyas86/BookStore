@@ -3,7 +3,7 @@ const cors = require('cors');
 const sequelize = require('./config/database');
 const bookRoutes = require('./routes/books');
 const authorRoutes = require('./routes/authors');
-const genreRoutes = require('./routes/genres');
+const genreRoutes  = require('./routes/genres');
 const bodyParser = require('body-parser');
 
 const app = express();
@@ -18,6 +18,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api', bookRoutes);
 app.use('/api', authorRoutes);
 app.use('/api', genreRoutes);
+
+app.use('/upload', uploadRoutes); //used to upload routes
 
 sequelize.sync().then(() => {
 }).catch(err => {

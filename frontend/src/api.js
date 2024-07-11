@@ -23,33 +23,5 @@ export const deleteAuthor = (id) => api.delete(`/authors/${id}`);
 export const getGenres = () => api.get(`/genres`);
 export const addGenre = (genre) => api.post(`/genres`, genre);
 
-export const searchBooksByTitle = (query) => api.get(`/search/title`, { params: { query } });
-export const searchBooksByAuthor = (query) => api.get(`/search/author`, { params: { query } });
-export const searchBooksByGenre = (query) => api.get(`/search/genre`, { params: { query } });
+export const searchBooks = (query) => api.get(`/books/search`, { params: { query } });
 
-// export const searchBooksByTitle = async (query) => {
-//   try {
-//     const response = api.get(`/search/title?query=${query}`);
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
-
-// export const searchBooksByAuthor = async (query) => {
-//   try {
-//     const response = api.get(`/search/author?query=${query}`);
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
-
-// export const searchBooksByGenre = async (query) => {
-//   try {
-//     const response = api.get(`/search/genre?query=${query}`);
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };

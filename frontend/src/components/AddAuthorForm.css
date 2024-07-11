@@ -1,0 +1,24 @@
+
+
+  h2 {
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  
+  .form-label {
+    font-weight: bold;
+  }
+  
+  .form-control {
+    border-radius: 0.25rem;
+  }
+  
+  .btn {
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.25rem;
+  }
+  
+  .text-center {
+    margin-top: 2rem;
+  }
+  

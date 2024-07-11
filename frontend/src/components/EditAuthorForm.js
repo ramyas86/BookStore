@@ -3,13 +3,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getAuthorById, updateAuthor } from '../api';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import './EditAuthorForm.css'; // Import a custom CSS file for additional styling
 
 const EditAuthorForm = () => {
   const { id } = useParams();
-  const [author, setAuthor] = useState({
-    name: '',
-    biography: ''
-  });
+  const [author, setAuthor] = useState({ name: '', biography: '' });
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -17,7 +15,7 @@ const EditAuthorForm = () => {
     const fetchAuthor = async () => {
       try {
         const response = await getAuthorById(id);
-        const fetchedAuthor = response.data; // Assuming your API response gives you author data
+        const fetchedAuthor = response.data;
 
         setAuthor({
           name: fetchedAuthor.name,
@@ -27,6 +25,7 @@ const EditAuthorForm = () => {
         setLoading(false);
       } catch (error) {
         console.error('Error fetching author:', error);
+        toast.error('Error fetching author data.');
       }
     };
 
@@ -44,10 +43,8 @@ const EditAuthorForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Make a PUT request to update the author with author.id
-      await updateAuthor(id, {name: author.name, biography: author.biography});
-      console.log('Author updated successfully!');
-      navigate('/authors'); // Redirect to /authors after successful update
+      await updateAuthor(id, { name: author.name, biography: author.biography });
+      navigate('/authors');
       toast.success('Author updated successfully!');
     } catch (error) {
       console.error('Error updating author:', error);
@@ -56,31 +53,47 @@ const EditAuthorForm = () => {
   };
 
   const handleCancel = () => {
-    navigate('/authors'); // Redirect to /authors when cancel button is clicked
+    navigate('/authors');
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p className="loading">Loading...</p>;
 
   return (
-    <>
-    <div className="container my-3">
-      <h2>Edit Author</h2>
-      <form onSubmit={handleSubmit}>
-      <div className="mb-3">
-      <label htmlFor="title" className="form-label">Name:</label>
-          <input type="text" className="form-control" name="name" value={author.name} onChange={handleChange} />
-        </div>
-
-        <div className="mb-3">
-        <label htmlFor="price" className="form-label">Biography:</label>
-          <textarea className="form-control" name="biography" value={author.biography} onChange={handleChange} />
-        </div>
-
-        <button type="submit" className="btn btn-primary mr-2">Save Changes</button>
-        <button type="button" className="btn btn-secondary mx-2" onClick={handleCancel}>Cancel</button>
-      </form>
+    <div className="container my-5">
+      <div className="card p-4 shadow-sm">
+        <h2 className="mb-4">Edit Author</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label htmlFor="name" className="form-label">Name:</label>
+            <input
+              type="text"
+              className="form-control"
+              id="name"
+              name="name"
+              value={author.name}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="biography" className="form-label">Biography:</label>
+            <textarea
+              className="form-control"
+              id="biography"
+              name="biography"
+              value={author.biography}
+              onChange={handleChange}
+              rows="5"
+              required
+            />
+          </div>
+          <div className="d-flex justify-content-between">
+            <button type="submit" className="btn btn-primary">Save Changes</button>
+            <button type="button" className="btn btn-secondary" onClick={handleCancel}>Cancel</button>
+          </div>
+        </form>
+      </div>
     </div>
-    </>
   );
 };
 

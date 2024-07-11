@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { searchBooksByTitle, searchBooksByAuthor, searchBooksByGenre } from '../api';
+import { searchBooks } from '../api';
 import './SearchComponent.css'; // Import CSS file for styling
 
 const SearchComponent = ({ setSearchResults }) => {
@@ -11,19 +11,9 @@ const SearchComponent = ({ setSearchResults }) => {
     setLoading(true);
     setError('');
     try {
-      const [titleResults, authorResults, genreResults] = await Promise.all([
-        searchBooksByTitle(query),
-        searchBooksByAuthor(query),
-        searchBooksByGenre(query),
-      ]);
+      const bookResults = await Promise.all([ searchBooks(query) ]);
 
-      const results = {
-        title: titleResults.data || [],
-        author: authorResults.data || [],
-        genre: genreResults.data || [],
-      };
-
-      setSearchResults(results);
+      setSearchResults(bookResults[0].data);
     } catch (err) {
       console.error('Error fetching search results:', err);
       setError('Error searching for books');

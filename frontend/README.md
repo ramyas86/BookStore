@@ -97,3 +97,5 @@ cd bookstore
 npm install bootstrap aos react-toastify
 npm i react-bootstrap
 npm install --save react-responsive
+npm install @fortawesome/fontawesome-svg-core @fortawesome/free-solid-svg-icons @fortawesome/react-fontawesome
+npm install react-icons --save
