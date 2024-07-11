@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getBooks, deleteBook } from '../api';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import CustomNavbar from './Navbar';
 import SearchComponent from '../components/SearchComponent';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import './BooksPage.css'; // Import the CSS file for styling
 import DeleteConfirmation from './DeleteConfirmation'; // Import the DeleteConfirmation component
-import EditBookForm from './EditBookForm'; // Import the EditBookForm component
-import { Offcanvas } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 function BooksPage() {
   const [books, setBooks] = useState([]);
@@ -18,10 +15,9 @@ function BooksPage() {
   const [searchResults, setSearchResults] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [bookToDelete, setBookToDelete] = useState(null);
-  const [bookToEdit, setBookToEdit] = useState(null);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  function refreshEditedBook() {
+  useEffect(() => {
     async function fetchBooks() {
       try {
         const response = await getBooks();
@@ -34,10 +30,6 @@ function BooksPage() {
     }
 
     fetchBooks();
-  }
-
-  useEffect(() => {
-    refreshEditedBook();
   }, []);
 
   const handleDelete = (id) => {
@@ -60,14 +52,8 @@ function BooksPage() {
     }
   };
 
-  const handleEdit = (book) => {
-    console.log(book);
-    setBookToEdit(book);
-  };
-
-  const handleCloseEditOffcanvas = () => {
-    setBookToEdit(null);
-    refreshEditedBook();
+  const handleEdit = (id) => {
+    navigate('/edit-book/' + id);
   };
 
   const displayBooks = searchResults ? searchResults : books;
@@ -127,7 +113,7 @@ function BooksPage() {
                                 <p className="card-text">Price: ${book.price}</p>
                                 <p className="card-text">Publication Date: {new Date(book.publication_date).toLocaleDateString()}</p>
                                 <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                                  <FaEdit className="text-secondary edit-icon" onClick={() => handleEdit(book)} />
+                                  <FaEdit className="text-secondary edit-icon" onClick={() => handleEdit(book.book_id)} />
                                   <FaTrash className="text-danger delete-icon" onClick={() => handleDelete(book.book_id)} />
                                 </div>
                               </div>
@@ -148,16 +134,6 @@ function BooksPage() {
         handleClose={() => setShowDeleteModal(false)}
         handleConfirm={handleConfirmDelete}
       />
-      {bookToEdit && (
-        <Offcanvas show={true} onHide={handleCloseEditOffcanvas} placement="end">
-          <Offcanvas.Header closeButton>
-            <Offcanvas.Title>Edit Book</Offcanvas.Title>
-          </Offcanvas.Header>
-          <Offcanvas.Body>
-            <EditBookForm book={bookToEdit} onClose={handleCloseEditOffcanvas} />
-          </Offcanvas.Body>
-        </Offcanvas>
-      )}
     </>
   );
 }

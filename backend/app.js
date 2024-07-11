@@ -5,6 +5,7 @@ const bookRoutes = require('./routes/books');
 const authorRoutes = require('./routes/authors');
 const genreRoutes  = require('./routes/genres');
 const bodyParser = require('body-parser');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -18,8 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api', bookRoutes);
 app.use('/api', authorRoutes);
 app.use('/api', genreRoutes);
-
-app.use('/upload', uploadRoutes); //used to upload routes
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 sequelize.sync().then(() => {
 }).catch(err => {

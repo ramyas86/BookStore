@@ -8,9 +8,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import CustomNavbar from './Navbar';
 import './AuthorsPage.css'; // Import custom CSS
+import DeleteConfirmation from './DeleteConfirmation'; // Import the DeleteConfirmation component
 
 const AuthorsPage = () => {
   const [authors, setAuthors] = useState([]);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [authorToDelete, setAuthorToDelete] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,17 +34,25 @@ const AuthorsPage = () => {
     navigate("/edit-author/" + id);
   }
 
-  const handleDelete = async (authorId) => {
+  const handleDelete = (authorId) => {
+    setAuthorToDelete(authorId);
+    setShowDeleteModal(true);
+  };
+
+  const handleConfirmDelete = async () => {
     try {
-      await deleteAuthor(authorId);
+      await deleteAuthor(authorToDelete);
       fetchAuthors();
       toast.success('Author deleted successfully!');
-    }
-    catch (error) {
+      setShowDeleteModal(false);
+      setAuthorToDelete(null);
+    } catch (error) {
       console.error('Error deleting author:', error);
       toast.error('Error deleting author. Please try again.');
+      setShowDeleteModal(false);
+      setAuthorToDelete(null);
     }
-  }
+  };
 
   return (
     <>
@@ -68,6 +79,11 @@ const AuthorsPage = () => {
           <Link to="/add-author" className="btn btn-primary">Add New Author</Link>
         </div>
       </div>
+      <DeleteConfirmation
+        show={showDeleteModal}
+        handleClose={() => setShowDeleteModal(false)}
+        handleConfirm={handleConfirmDelete}
+      />
     </>
   );
 };

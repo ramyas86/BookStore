@@ -43,4 +43,13 @@
     font-size: 1.25rem;
     color: #6c757d;
   }
+
+  .edit-book-form {
+    padding: 20px;
+  }
+  
+  .edit-book-form img {
+    max-width: 100%;
+  }
+  
   
