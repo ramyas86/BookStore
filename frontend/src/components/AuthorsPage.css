@@ -51,10 +51,6 @@
   margin-left: 10px;
 }
 
-.edit-icon, .delete-icon {
-  cursor: pointer;
-}
-
 .edit-icon:hover, .delete-icon:hover {
   opacity: 0.7;
 }

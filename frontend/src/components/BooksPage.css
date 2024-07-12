@@ -45,12 +45,11 @@
   margin-bottom: 5px;
 }
 
-/* Style for the edit and delete icons */
+/* Edit and delete icon styling */
 .edit-icon,
 .delete-icon {
   cursor: pointer;
-  font-size: 1.2rem;
-  margin-left: 5px;
+  margin-left: 10px;
 }
 
 /* Media query for medium screens */
