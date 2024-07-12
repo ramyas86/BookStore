@@ -57,14 +57,32 @@ const AuthorsPage = () => {
   return (
     <>
       <CustomNavbar />
-      <div className="container my-3">
-        <h2 className="text-center mb-4">Authors</h2>
+      <div className="container my-1">
+        <h2 className="text-center mb-2">Authors</h2>
+        <div className="d-grid gap-2 d-md-flex justify-content-md-end mb-4">
+          <Link to="/add-author" className="btn btn-primary">Add New Author</Link>
+        </div>
         <div className="row row-cols-1 row-cols-md-3 g-4">
           {authors.map(author => (
             <div key={author.author_id} className="col">
               <div className="card h-100 author-card">
                 <div className="card-body d-flex flex-column">
-                  <h5 className="card-title">{author.name}</h5>
+                  <div className="d-flex align-items-center mb-3">
+                    {author.imagePath ? (
+                      <img 
+                        src={author.imagePath} 
+                        className="author-card-img rounded-circle" 
+                        alt={author.name} 
+                      />
+                    ) : (
+                      <div className="author-initial rounded-circle">
+                        {author.name.charAt(0)}
+                      </div>
+                    )}
+                    <div className="ms-3">
+                      <h5 className="card-title mb-1">{author.name}</h5>
+                    </div>
+                  </div>
                   <p className="card-text flex-grow-1">Biography: {author.biography}</p>
                   <div className="d-grid gap-2 d-md-flex justify-content-md-end">
                     <FaEdit className="text-secondary me-md-2 edit-icon" onClick={() => handleEdit(author.author_id)} />
@@ -74,9 +92,6 @@ const AuthorsPage = () => {
               </div>
             </div>
           ))}
-        </div>
-        <div className="text-center mt-4">
-          <Link to="/add-author" className="btn btn-primary">Add New Author</Link>
         </div>
       </div>
       <DeleteConfirmation
@@ -89,3 +104,4 @@ const AuthorsPage = () => {
 };
 
 export default AuthorsPage;
+

@@ -19,7 +19,14 @@ export const updateBook = (id, formData) => {
 
 export const getBooks = () => api.get(`/books`);
 export const getBookById = (id) => api.get(`/books/${id}`);
-export const addBook = (book) => api.post(`/books`, book);
+export const addBook = (formData) => {
+  return api.post(`/books`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};
+// export const addBook = (book) => api.post(`/books`, book);
 // export const updateBook = (id, book) => api.put(`/books/${id}`, book);
 export const deleteBook = (id) => api.delete(`/books/${id}`);
 

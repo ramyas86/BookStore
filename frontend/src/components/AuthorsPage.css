@@ -14,12 +14,34 @@
 
 .card-title {
   font-size: 1.25rem;
-  margin-bottom: 10px;
+  margin-bottom: 0.5rem;
 }
 
 .card-text {
-  margin-bottom: 5px;
-  flex-grow: 1;
+  font-size: 1rem;
+}
+
+
+.author-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.author-card-img {
+  width: 100px;
+  height: 100px;
+}
+
+.author-initial {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 45px;
+  color: white;
+  background-color: #6c757d; /* Default background color */
+  border-radius: 50%;
 }
 
 /* Edit and delete icon styling */
@@ -29,12 +51,12 @@
   margin-left: 10px;
 }
 
-.edit-icon:hover {
-  color: #007bff; /* Bootstrap primary color */
+.edit-icon, .delete-icon {
+  cursor: pointer;
 }
 
-.delete-icon:hover {
-  color: #dc3545; /* Bootstrap danger color */
+.edit-icon:hover, .delete-icon:hover {
+  opacity: 0.7;
 }
 
 /* Button styling */

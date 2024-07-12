@@ -7,10 +7,10 @@ const seed = async () => {
   await sequelize.sync({ force: true });
 
   const authors = await Author.bulkCreate([
-    { name: 'J.K. Rowling', biography: 'Author of Harry Potter series' },
-    { name: 'George R.R. Martin', biography: 'Author of A Song of Ice and Fire series' },
-    { name: 'J.R.R. Tolkien', biography: 'Author of The Lord of the Rings.' },
-    { name: 'Dan Brown', biography: 'Author of Angels & Demons, The Da Vinci Code, The Lost Symbol, Inferno, and Origin'}
+    { name: 'J.K. Rowling', biography: 'Author of Harry Potter series', imagePath: '../images/path_to_image_5.jpg' },
+    { name: 'George R.R. Martin', biography: 'Author of A Song of Ice and Fire series', imagePath: '../images/path_to_image_6.jpg'},
+    { name: 'J.R.R. Tolkien', biography: 'Author of The Lord of the Rings.', imagePath: '../images/path_to_image_7.jpg'},
+    { name: 'Dan Brown', biography: 'Author of Angels & Demons, The Da Vinci Code, The Lost Symbol, Inferno, and Origin', imagePath: '../images/path_to_image_8.jpg'}
   ]);
 
   const genres = await Genre.bulkCreate([

@@ -9,7 +9,7 @@ const Book = require('../models/book');
 router.get('/books/search', bookController.searchBooks);
 router.get('/books', bookController.getBooks);
 router.get('/books/:book_id', bookController.getBookById);
-router.post('/books', bookController.addBook);
+// router.post('/books', bookController.addBook);
 // router.put('/books/:book_id', bookController.updateBook);
 router.delete('/books/:book_id', bookController.deleteBook);
 
@@ -31,7 +31,25 @@ const storage = multer.diskStorage({
     fs.mkdirSync(uploadsDir);
   }
   
-  // Route for updating a book
+  router.post('/books', upload.single('book_image'), async (req, res, next) => {
+    try {
+      if (req.file) {
+        req.body.imagePath = `http://localhost:3001/uploads/${req.file.filename}`;
+      }
+  
+      const newBook = await Book.create(req.body);
+      if (newBook) {
+        return res.status(201).json({ message: 'Book created successfully', book: newBook });
+      }
+  
+      throw new Error('Failed to create a book.');
+    } catch (error) {
+      console.error(error);
+      next(error);
+    }});
+
+
+    // Route for updating a book
   router.put('/books/:id', upload.single('book_image'), async (req, res, next) => {
       try {
         if (req.file) {

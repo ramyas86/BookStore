@@ -1,102 +1,70 @@
 /* BooksPage.css */
 
-/* General container styling */
-.container.books-page-container {
-  padding-top: 20px;
+/* Style for the container */
+.books-page-container {
+  padding: 20px;
 }
 
-/* Search component container styling */
-.search-component-container {
-  margin-bottom: 20px;
-  margin-top: 100px;
-  width: 350px;
-  margin-left: -80px;
+/* Style for the book card */
+.card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  transition: box-shadow 0.3s ease;
+  display: flex; /* Use flexbox for layout */
+  overflow: hidden; /* Prevent overflow issues */
 }
 
-/* Book card styling */
-.card.h-100 {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+.card:hover {
+  box-shadow: 0 0 11px rgba(33,33,33,.2); /* Adding a shadow on hover */
 }
 
+/* Style for the book image */
 .book-card-img {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
-
-
-/* Accordion styling */
-.accordion-button {
-  font-weight: bold;
+  width: 200px; /* Set fixed width for the image */
+  height: auto; /* Auto height to maintain aspect ratio */
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px; /* Adjust border radius for bottom left */
+  object-fit: cover; /* Ensure image covers the container */
 }
 
-.accordion-body .card-body {
+/* Style for the card body */
+.card-body {
+  flex: 1; /* Take remaining space beside the image */
   padding: 15px;
 }
 
-/* Card title and text styling */
+/* Style for the card title */
 .card-title {
-  font-size: 1.25rem;
-  margin-bottom: 10px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px; /* Increase margin for spacing */
 }
 
+/* Style for the card text */
 .card-text {
   margin-bottom: 5px;
 }
 
-/* Edit and delete icon styling */
+/* Style for the edit and delete icons */
 .edit-icon,
 .delete-icon {
   cursor: pointer;
-  margin-left: 10px;
+  font-size: 1.2rem;
+  margin-left: 5px;
 }
 
-.edit-icon:hover {
-  color: #007bff; /* Bootstrap primary color */
-}
-
-.delete-icon:hover {
-  color: #dc3545; /* Bootstrap danger color */
-}
-
-/* Button styling */
-.btn-primary {
-  background-color: #007bff;
-  border-color: #007bff;
-}
-
-.btn-primary:hover {
-  background-color: #0056b3;
-  border-color: #0056b3;
-}
-
-/* Modal styling (optional) */
-.modal-content {
-  border-radius: 0.5rem;
-}
-
-.modal-header {
-  border-bottom: none;
-}
-
-.modal-footer {
-  border-top: none;
-}
-
-/* Responsive styling */
+/* Media query for medium screens */
 @media (max-width: 768px) {
+  .card {
+    flex-direction: column; /* Stack image and content on small screens */
+  }
+
   .book-card-img {
-    height: 150px;
-  }
-  
-  .card-title {
-    font-size: 1rem;
-  }
-  
-  .card-text {
-    font-size: 0.875rem;
+    width: 100%; /* Full width for image on smaller screens */
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px; /* Adjust border radius for top right */
+    border-bottom-left-radius: 0; /* Remove bottom left radius */
+    border-bottom-right-radius: 0; /* Remove bottom right radius */
+    margin-bottom: 10px; /* Add margin below image */
   }
 }
-

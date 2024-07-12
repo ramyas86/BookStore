@@ -10,7 +10,7 @@ const EditBookForm = ({ book, onClose }) => {
     genreId: book.genre_id,
     price: book.price,
     publicationDate: book.publication_date,
-    book_image: book.imagePath , // This will store the image path
+    book_image: book.imagePath ,
   });
   const [authors, setAuthors] = useState([]);
   const [genres, setGenres] = useState([]);
@@ -83,6 +83,7 @@ const EditBookForm = ({ book, onClose }) => {
   };
 
   return (
+    <>
     <form onSubmit={handleSubmit}>
       <div className="mb-3">
         <label htmlFor="title" className="form-label">Title</label>
@@ -174,6 +175,7 @@ const EditBookForm = ({ book, onClose }) => {
       </div>
       <button type="submit" className="btn btn-primary">Update Book</button>
     </form>
+    </>
   );
 };
 

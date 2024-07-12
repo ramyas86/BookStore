@@ -31,6 +31,10 @@ const Author = sequelize.define('Author', {
       }
     }
   },
+  imagePath: {
+    type: DataTypes.STRING,   // Storing image paths
+    allowNull: true // or false based on whether imagePath is required
+  },
 });
 
 module.exports = Author;
