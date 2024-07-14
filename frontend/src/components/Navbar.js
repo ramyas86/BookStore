@@ -2,9 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserPlus, faBook, faPlus } from '@fortawesome/free-solid-svg-icons'; // Import icons from FontAwesome
+import { faUserPlus, faBook, faPlus } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Ensure Bootstrap JS is imported
 import './Navbar.css'; // Custom CSS file for Navbar styles
 
 const Navbar = () => {

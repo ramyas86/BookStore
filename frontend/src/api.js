@@ -30,7 +30,7 @@ export const addBook = (formData) => {
 // export const updateBook = (id, book) => api.put(`/books/${id}`, book);
 export const deleteBook = (id) => api.delete(`/books/${id}`);
 
-export const getAuthors = () => api.get(`/authors`);
+export const getAuthors = (selectedLetter, currentPage) => api.get(`/authors`, { params: { letter : selectedLetter} });
 export const getAuthorById = (id) => api.get(`/authors/${id}`);
 export const addAuthor = (author) => api.post(`/authors`, author);
 export const updateAuthor = (id, author) => api.put(`/authors/${id}`, author);

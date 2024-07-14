@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getAuthors, getGenres, updateBook } from '../api';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
 const EditBookForm = ({ book, onClose }) => {
   const [formData, setFormData] = useState({
@@ -10,12 +11,14 @@ const EditBookForm = ({ book, onClose }) => {
     genreId: book.genre_id,
     price: book.price,
     publicationDate: book.publication_date,
-    book_image: book.imagePath ,
+    book_image: book.imagePath,
   });
   const [authors, setAuthors] = useState([]);
   const [genres, setGenres] = useState([]);
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(book.imagePath ? book.imagePath : null);
+  const [removeImage, setRemoveImage] = useState(false); // State to track if image should be removed
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAuthors = async () => {
@@ -54,6 +57,17 @@ const EditBookForm = ({ book, onClose }) => {
     setImagePreview(URL.createObjectURL(file));
   };
 
+  const handleRemoveImage = () => {
+    setImageFile(null); // Clear the image file
+    setImagePreview(null); // Clear the image preview
+    setRemoveImage(true); // Set removeImage flag to true
+  };
+
+  const handleCancel = () => {
+    navigate('/books');
+    onClose(); // Close the offcanvas if cancel is clicked
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const updatedBookData = {
@@ -69,6 +83,8 @@ const EditBookForm = ({ book, onClose }) => {
     }
     if (imageFile) {
       formDataToSend.append('book_image', imageFile);
+    } else if (removeImage) {
+      formDataToSend.append('remove_image', 'true'); // Add a flag to indicate image removal
     }
     console.log(updatedBookData);
 
@@ -84,97 +100,111 @@ const EditBookForm = ({ book, onClose }) => {
 
   return (
     <>
-    <form onSubmit={handleSubmit}>
-      <div className="mb-3">
-        <label htmlFor="title" className="form-label">Title</label>
-        <input
-          type="text"
-          className="form-control"
-          id="title"
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div className="mb-3">
-        <label htmlFor="authorId" className="form-label">Author</label>
-        <select
-          className="form-control"
-          id="authorId"
-          name="authorId"
-          value={formData.authorId}
-          onChange={handleChange}
-          required
-        >
-          <option value="">Select Author</option>
-          {authors.map(author => (
-            <option key={author.author_id} value={author.author_id}>
-              {author.name}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="mb-3">
-        <label htmlFor="genreId" className="form-label">Genre</label>
-        <select
-          className="form-control"
-          id="genreId"
-          name="genreId"
-          value={formData.genreId}
-          onChange={handleChange}
-          required
-        >
-          <option value="">Select Genre</option>
-          {genres.map(genre => (
-            <option key={genre.genre_id} value={genre.genre_id}>
-              {genre.genre_name}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="mb-3">
-        <label htmlFor="price" className="form-label">Price</label>
-        <input
-          type="number"
-          className="form-control"
-          id="price"
-          name="price"
-          value={formData.price}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div className="mb-3">
-        <label htmlFor="publicationDate" className="form-label">Publication Date</label>
-        <input
-          type="date"
-          className="form-control"
-          id="publicationDate"
-          name="publicationDate"
-          value={formData.publicationDate}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div className="mb-3">
-        <label htmlFor="book_image" className="form-label">Book Image</label>
-        <input
-          type="file"
-          className="form-control"
-          id="book_image"
-          name="book_image"
-          accept="image/*"
-          onChange={handleFileChange}
-        />
-        {imagePreview && (
-          <div className="mt-3">
-            <img src={imagePreview} alt="Book Preview" style={{ maxWidth: '100%' }} />
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <label htmlFor="title" className="form-label">Title</label>
+          <input
+            type="text"
+            className="form-control"
+            id="title"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="authorId" className="form-label">Author</label>
+          <select
+            className="form-control"
+            id="authorId"
+            name="authorId"
+            value={formData.authorId}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select Author</option>
+            {authors.map(author => (
+              <option key={author.author_id} value={author.author_id}>
+                {author.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="mb-3">
+          <label htmlFor="genreId" className="form-label">Genre</label>
+          <select
+            className="form-control"
+            id="genreId"
+            name="genreId"
+            value={formData.genreId}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select Genre</option>
+            {genres.map(genre => (
+              <option key={genre.genre_id} value={genre.genre_id}>
+                {genre.genre_name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="mb-3">
+          <label htmlFor="price" className="form-label">Price</label>
+          <input
+            type="number"
+            className="form-control"
+            id="price"
+            name="price"
+            value={formData.price}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="publicationDate" className="form-label">Publication Date</label>
+          <input
+            type="date"
+            className="form-control"
+            id="publicationDate"
+            name="publicationDate"
+            value={formData.publicationDate}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="book_image" className="form-label">Book Image</label>
+          <input
+            type="file"
+            className="form-control"
+            id="book_image"
+            name="book_image"
+            accept="image/*"
+            onChange={handleFileChange}
+          />
+          {imagePreview && (
+            <div className="mt-3">
+              <img src={imagePreview} alt="Book Preview" style={{ maxWidth: '100%' }} />
+              <button type="button" className="btn btn-danger mt-2" onClick={handleRemoveImage}>
+                Remove Image
+              </button>
+            </div>
+          )}
+        </div>
+        <div className="row justify-content-center mt-4">
+          <div className="col-auto">
+            <button type="submit" className="btn btn-primary">
+              Save Changes
+            </button>
           </div>
-        )}
-      </div>
-      <button type="submit" className="btn btn-primary">Update Book</button>
-    </form>
+          <div className="col-auto">
+            <button type="button" className="btn btn-secondary" onClick={handleCancel}>
+              Cancel
+            </button>
+          </div>
+        </div>
+      </form>
     </>
   );
 };

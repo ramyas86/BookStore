@@ -52,6 +52,22 @@
   margin-left: 10px;
 }
 
+.fab {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  text-decoration: none;
+}
+
 /* Media query for medium screens */
 @media (max-width: 768px) {
   .card {

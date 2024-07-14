@@ -1,11 +1,23 @@
+const { where } = require('sequelize');
 const Author = require('../models/author');
 const Book = require('../models/book');
+const { Op } = require('sequelize');
 const formatName = require('../utils/formatName');
 
 exports.getAuthors = async (req, res) => {
   try {
-    const authors = await Author.findAll();
-    res.json(authors);
+    const { letter, page = 1, limit = 10 } = req.query;
+    const wherClause = letter ? { name: { [Op.startsWith]: letter } } : {};
+    const offset = (page - 1) * limit;
+
+    const { count, rows: authors }  = await Author.findAndCountAll({
+      where: wherClause,
+      offset: parseInt(offset),
+      limit: parseInt(limit),
+   });
+    res.json({
+      authors,
+      totalPages: Math.ceil(count / limit)  });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

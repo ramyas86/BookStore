@@ -1,99 +1,131 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { getAuthorById, updateAuthor } from '../api';
+import { updateAuthor } from '../api';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import './EditAuthorForm.css'; // Import a custom CSS file for additional styling
+import { useNavigate } from 'react-router-dom';
 
-const EditAuthorForm = () => {
-  const { id } = useParams();
-  const [author, setAuthor] = useState({ name: '', biography: '' });
-  const [loading, setLoading] = useState(true);
+const EditAuthorForm = ({ author, onClose }) => {
+  const [formData, setFormData] = useState({
+    name: author.name,
+    bio: author.biography,
+    author_image: author.imagePath,
+  });
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(author.imagePath ? author.imagePath : null);
+  const [removeImage, setRemoveImage] = useState(false); // State to track if image should be removed
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchAuthor = async () => {
-      try {
-        const response = await getAuthorById(id);
-        const fetchedAuthor = response.data;
-
-        setAuthor({
-          name: fetchedAuthor.name,
-          biography: fetchedAuthor.biography
-        });
-
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching author:', error);
-        toast.error('Error fetching author data.');
-      }
-    };
-
-    fetchAuthor();
-  }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setAuthor(prevAuthor => ({
-      ...prevAuthor,
-      [name]: value
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
     }));
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file));
+  };
+
+  const handleRemoveImage = () => {
+    setImageFile(null); // Clear the image file
+    setImagePreview(null); // Clear the image preview
+    setRemoveImage(true); // Set removeImage flag to true
+  };
+
+  const handleCancel = () => {
+    navigate('/authors');
+    onClose(); // Close the offcanvas if cancel is clicked
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const updatedAuthorData = {
+      ...formData,
+      biography: formData.bio
+    };
+
+    const formDataToSend = new FormData();
+    for (let key in updatedAuthorData) {
+      formDataToSend.append(key, updatedAuthorData[key]);
+    }
+    if (imageFile) {
+      formDataToSend.append('author_image', imageFile);
+    } else if (removeImage) {
+      formDataToSend.append('remove_image', 'true'); // Add a flag to indicate image removal
+    }
+
     try {
-      await updateAuthor(id, { name: author.name, biography: author.biography });
-      navigate('/authors');
+      await updateAuthor(author.author_id, formDataToSend);
       toast.success('Author updated successfully!');
+      onClose(); // Close the offcanvas
     } catch (error) {
       console.error('Error updating author:', error);
       toast.error('Error updating author. Please try again.');
     }
   };
 
-  const handleCancel = () => {
-    navigate('/authors');
-  };
-
-  if (loading) return <p className="loading">Loading...</p>;
-
   return (
-    <div className="container my-5">
-      <div className="card p-4 shadow-sm">
-        <h2 className="mb-4">Edit Author</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label htmlFor="name" className="form-label">Name:</label>
-            <input
-              type="text"
-              className="form-control"
-              id="name"
-              name="name"
-              value={author.name}
-              onChange={handleChange}
-              required
-            />
+    <>
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <label htmlFor="name" className="form-label">Name</label>
+          <input
+            type="text"
+            className="form-control"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="bio" className="form-label">Bio</label>
+          <textarea
+            className="form-control"
+            id="bio"
+            name="bio"
+            value={formData.bio}
+            onChange={handleChange}
+            required
+          ></textarea>
+        </div>
+        <div className="mb-3">
+          <label htmlFor="author_image" className="form-label">Author Image</label>
+          <input
+            type="file"
+            className="form-control"
+            id="author_image"
+            name="author_image"
+            accept="image/*"
+            onChange={handleFileChange}
+          />
+          {imagePreview && (
+            <div className="mt-3">
+              <img src={imagePreview} alt="Author Preview" style={{ maxWidth: '100%' }} />
+              <button type="button" className="btn btn-danger mt-2" onClick={handleRemoveImage}>
+                Remove Image
+              </button>
+            </div>
+          )}
+        </div>
+        <div className="row justify-content-center mt-4">
+          <div className="col-auto">
+            <button type="submit" className="btn btn-primary">
+              Save Changes
+            </button>
           </div>
-          <div className="mb-3">
-            <label htmlFor="biography" className="form-label">Biography:</label>
-            <textarea
-              className="form-control"
-              id="biography"
-              name="biography"
-              value={author.biography}
-              onChange={handleChange}
-              rows="5"
-              required
-            />
+          <div className="col-auto">
+            <button type="button" className="btn btn-secondary" onClick={handleCancel}>
+              Cancel
+            </button>
           </div>
-          <div className="d-flex justify-content-between">
-            <button type="submit" className="btn btn-primary">Save Changes</button>
-            <button type="button" className="btn btn-secondary" onClick={handleCancel}>Cancel</button>
-          </div>
-        </form>
-      </div>
-    </div>
+        </div>
+      </form>
+    </>
   );
 };
 
