@@ -5,12 +5,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserPlus, faBook, faPlus } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Navbar.css'; // Custom CSS file for Navbar styles
+import bookstoreLogo from './images/education.png'; // Import your bookstore logo
 
 const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
       <div className="container">
-        <Link to="/" className="navbar-brand">Bookstore</Link>
+        <Link to="/" className="navbar-brand">
+        <img src={bookstoreLogo} alt="Bookstore Logo" className="logo" /><span> BookStore</span>
+        </Link>
         <button 
           className="navbar-toggler" 
           type="button" 

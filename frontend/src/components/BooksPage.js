@@ -112,7 +112,7 @@ function BooksPage() {
               <div key={book.book_id} className="col mb-3">
                 <div className="card" style={{height: '100% !important'}}>
                   <div className="row g-0 h-100">
-                    <div className="col-md-3 d-flex align-items-center">
+                    <div className="col-md-4 d-flex align-items-center">
                       {/* Book image */}
                       <img 
                         src={book.imagePath ? book.imagePath : process.env.PUBLIC_URL + '/images/default_book_image.webp'} 
@@ -120,7 +120,7 @@ function BooksPage() {
                         alt={book.title} 
                       />
                     </div>
-                    <div className="col-md-9">
+                    <div className="col-md-8">
                       <div className="card-body d-flex flex-column justify-content-between h-100">
                         {/* Book details */}
                         <div className="book-details">
@@ -145,7 +145,7 @@ function BooksPage() {
         )}
       </div>
       {/* Pagination */}
-      <div className="d-flex justify-content-center mt-4">
+      <div className="paginate">
             <Pagination>
               {Array.from({ length: totalPages }, (_, index) => (
                 <Pagination.Item

@@ -2,6 +2,11 @@ import React from 'react';
 import './HomePage.css'; // Import custom CSS for HomePage styles
 import home_image from './images/bookstore.jpg'; // Import your home image
 import CustomNavbar from './Navbar';
+import 'aos/dist/aos.css'; // Import AOS styles
+import AOS from 'aos'; // Import AOS for animations
+
+// Initialize AOS
+AOS.init();
 
 const HomePage = () => {
   return (
@@ -24,14 +29,17 @@ const HomePage = () => {
         <div className="container">
           <div className="row">
             <div className="col-md-4" data-aos="fade-up">
+              <i className="bi bi-book-half display-4 text-primary mb-3"></i>
               <h3>Wide Selection</h3>
               <p>Choose from thousands of titles across all genres</p>
             </div>
             <div className="col-md-4" data-aos="fade-up" data-aos-delay="200">
+              <i className="bi bi-people-fill display-4 text-primary mb-3"></i>
               <h3>Top Authors</h3>
               <p>Find books from bestselling authors and rising stars</p>
             </div>
             <div className="col-md-4" data-aos="fade-up" data-aos-delay="400">
+              <i className="bi bi-tags-fill display-4 text-primary mb-3"></i>
               <h3>Great Prices</h3>
               <p>Enjoy competitive pricing and special offers</p>
             </div>

@@ -112,8 +112,8 @@ const AddBookForm = () => {
       <div className="container add-book-container">
         <h2 style={{textAlign: 'center'}}>Add New Book</h2>
         <div className="row">
-          <div className="col-md-6">
-            <img src={add_image} alt="Add a Book" className="img-fluid" />
+          <div className="col-md-6 mt-4">
+            <img src={add_image} alt="Add a Book" className="img-fluid imgcss" />
           </div>
           <div className="col-md-6" style={{marginTop: '20px'}}>
             <form onSubmit={handleSubmit}>
@@ -123,6 +123,7 @@ const AddBookForm = () => {
                   type="text"
                   className="form-control"
                   id="title"
+                  placeholder='Add title of the book'
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   required
@@ -184,6 +185,7 @@ const AddBookForm = () => {
                   type="text"
                   className="form-control"
                   id="price"
+                  placeholder='Price of the book'
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
                   required

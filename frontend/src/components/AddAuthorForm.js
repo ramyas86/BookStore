@@ -61,6 +61,7 @@ const AddAuthorForm = () => {
                 type="text"
                 className="form-control"
                 id="name"
+                placeholder='Name of the author'
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
@@ -71,6 +72,7 @@ const AddAuthorForm = () => {
               <textarea
                 className="form-control"
                 id="biography"
+                placeholder="Author's biography"
                 value={biography}
                 onChange={(e) => setBiography(e.target.value)}
                 rows="5"

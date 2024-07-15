@@ -100,10 +100,10 @@ function AuthorsPage() {
     <>
       <div>
         <CustomNavbar />
-        <div className="container authors-page-container">
+        <div className="container authors-container">
           <h2 className="text-center mb-4">Authors</h2>
           <AlphabetFilter selectedLetter={selectedLetter} onSelectLetter={filterAuthor} />
-          {selectedLetter && <p>Authors starting with {selectedLetter}</p>}
+          {selectedLetter && <p style={{ textAlign: 'center', fontWeight: 'lighter' }}>Authors starting with <b>{selectedLetter}</b></p>}
           {/* Render loading message */}
           {loading && <p>Loading...</p>}
 
@@ -115,9 +115,9 @@ function AuthorsPage() {
             <div className="row row-cols-1 row-cols-md-3 g-4">
               {currentAuthors.map((author) => (
                 <div key={author.author_id} className="col mb-3">
-                  <div className="card h-100">
-                    <div className="row g-0">
-                      <div className="col-md-3 d-flex align-items-center">
+                  <div className="card">
+                    <div className="row g-0 h-100">
+                      <div className="col-md-4 d-flex align-items-center">
                         {/* Author image */}
                         {author.imagePath ? (
                           <img
@@ -126,7 +126,7 @@ function AuthorsPage() {
                                 ? author.imagePath
                                 : process.env.PUBLIC_URL + '/images/default_author_image.jpg'
                             }
-                            className="author-card-img rounded-circle"
+                            className="author-card-img"
                             alt={author.name}
                           />
                         ) : (
@@ -135,7 +135,7 @@ function AuthorsPage() {
                           </div>
                         )}
                       </div>
-                      <div className="col-md-9">
+                      <div className="col-md-8">
                         <div className="card-body d-flex flex-column justify-content-between">
                           {/* Author details */}
                           <div>
@@ -143,7 +143,7 @@ function AuthorsPage() {
                             <p className="card-text">Biography: {author.biography}</p>
                           </div>
                           {/* Edit and delete icons */}
-                          <div className="icon-container">
+                          <div className="icons-container">
                             <FaEdit
                               className="text-secondary me-2 edit-icon"
                               onClick={() => handleEdit(author)}
@@ -163,7 +163,7 @@ function AuthorsPage() {
           )}
 
           {/* Pagination */}
-          <div className="d-flex justify-content-center mt-4">
+          <div className="paginate">
             <Pagination>
               {Array.from({ length: totalPages }, (_, index) => (
                 <Pagination.Item
