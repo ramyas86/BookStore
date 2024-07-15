@@ -7,8 +7,9 @@ import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
 import './AuthorsPage.css'; // Import the CSS file for styling
 import DeleteConfirmation from './DeleteConfirmation'; // Import the DeleteConfirmation component
 import EditAuthorForm from './EditAuthorForm'; // Import the EditAuthorForm component
-import { Offcanvas } from 'react-bootstrap';
+import { Offcanvas, Pagination } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import AlphabetFilter from './AlphabetFilter';
 
 function AuthorsPage() {
   // State variables
@@ -18,6 +19,8 @@ function AuthorsPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [authorToDelete, setAuthorToDelete] = useState(null);
   const [authorToEdit, setAuthorToEdit] = useState(null);
+  const [selectedLetter, setSelectedLetter] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Fetch authors from API on component mount
   useEffect(() => {
@@ -25,12 +28,11 @@ function AuthorsPage() {
   }, []);
 
   // Function to fetch authors
-  const refreshAuthors = async () => {
+  const refreshAuthors = async (selectedLetter) => {
     setLoading(true);
     try {
-      const response = await getAuthors();
+      const response = await getAuthors(selectedLetter);
       setAuthors(response.data.authors);
-      console.log(response.data.authors)
       setLoading(false);
     } catch (error) {
       console.error('Error fetching authors:', error);
@@ -49,7 +51,7 @@ function AuthorsPage() {
   const handleConfirmDelete = async () => {
     try {
       await deleteAuthor(authorToDelete);
-      setAuthors(authors.filter(author => author.author_id !== authorToDelete));
+      setAuthors(authors.filter((author) => author.author_id !== authorToDelete));
       toast.success('Author deleted successfully!');
       setShowDeleteModal(false);
       setAuthorToDelete(null);
@@ -72,92 +74,133 @@ function AuthorsPage() {
     refreshAuthors();
   };
 
+  const filterAuthor = (letter) => {
+    setSelectedLetter(letter);
+    refreshAuthors(letter);
+  };
+
   // Determine authors to display (search results or all authors)
   const displayAuthors = searchResults ? searchResults : authors;
 
+  // Pagination variables
+  const itemsPerPage = 6;
+  const totalPages = Math.ceil(displayAuthors.length / itemsPerPage);
+
+  // Pagination click handler
+  const handlePaginationClick = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  // Calculate current authors to display based on pagination
+  const indexOfLastAuthor = currentPage * itemsPerPage;
+  const indexOfFirstAuthor = indexOfLastAuthor - itemsPerPage;
+  const currentAuthors = displayAuthors.slice(indexOfFirstAuthor, indexOfLastAuthor);
+
   return (
     <>
-    <div>
-      <CustomNavbar />
-      {/* <div className="search-component-container">
-        <SearchComponent setSearchResults={setSearchResults} refreshAuthors={refreshAuthors} />
-      </div> */}
-      <div className="container authors-page-container">
-        <h2 className="text-center mb-4">Authors</h2>
+      <div>
+        <CustomNavbar />
+        <div className="container authors-page-container">
+          <h2 className="text-center mb-4">Authors</h2>
+          <AlphabetFilter selectedLetter={selectedLetter} onSelectLetter={filterAuthor} />
+          {selectedLetter && <p>Authors starting with {selectedLetter}</p>}
+          {/* Render loading message */}
+          {loading && <p>Loading...</p>}
 
-        {/* Render loading message */}
-        {loading && <p>Loading...</p>}
+          {/* Render no authors message */}
+          {!loading && currentAuthors.length === 0 && <p>No authors found.</p>}
 
-        {/* Render no authors message */}
-        {!loading && displayAuthors.length === 0 && <p>No authors found.</p>}
-
-        {/* Render authors */}
-        {!loading && displayAuthors.length > 0 && (
-          <div className="row row-cols-1 row-cols-md-3 g-4">
-            {displayAuthors.map((author) => (
-              <div key={author.author_id} className="col mb-3">
-                <div className="card h-100" style={{height: "200px !important"}}>
-                  <div className="row g-0 h-100">
-                    <div className="col-md-3 d-flex align-items-center">
-                      {/* Author image */}
-                      {author.imagePath ? (
-                        <img
-                          src={author.imagePath ? author.imagePath : process.env.PUBLIC_URL + '/images/default_author_image.jpg'}
-                          className="author-card-img"
-                          alt={author.name} />
-                      ) : (
-                        <div className="author-initial">
-                          {author.name.slice(0,2).toUpperCase()}
-                        </div>
-                      )}
-                    </div>
-                    <div className="col-md-9">
-                      <div className="card-body d-flex flex-column justify-content-between">
-                        {/* Author details */}
-                        <div>
-                          <h5 className="card-title">{author.name}</h5>
-                          <p className="card-text">Biography: {author.biography}</p>
-                        </div>
-                        {/* Edit and delete icons */}
-                        <div className="icon-container">
-                          <FaEdit className="text-secondary me-2 edit-icon" onClick={() => handleEdit(author)} />
-                          <FaTrash className="text-danger delete-icon" onClick={() => handleDelete(author.author_id)} />
+          {/* Render authors */}
+          {!loading && currentAuthors.length > 0 && (
+            <div className="row row-cols-1 row-cols-md-3 g-4">
+              {currentAuthors.map((author) => (
+                <div key={author.author_id} className="col mb-3">
+                  <div className="card h-100">
+                    <div className="row g-0">
+                      <div className="col-md-3 d-flex align-items-center">
+                        {/* Author image */}
+                        {author.imagePath ? (
+                          <img
+                            src={
+                              author.imagePath
+                                ? author.imagePath
+                                : process.env.PUBLIC_URL + '/images/default_author_image.jpg'
+                            }
+                            className="author-card-img rounded-circle"
+                            alt={author.name}
+                          />
+                        ) : (
+                          <div className="author-initial">
+                            {author.name.slice(0, 2).toUpperCase()}
+                          </div>
+                        )}
+                      </div>
+                      <div className="col-md-9">
+                        <div className="card-body d-flex flex-column justify-content-between">
+                          {/* Author details */}
+                          <div>
+                            <h5 className="card-title">{author.name}</h5>
+                            <p className="card-text">Biography: {author.biography}</p>
+                          </div>
+                          {/* Edit and delete icons */}
+                          <div className="icon-container">
+                            <FaEdit
+                              className="text-secondary me-2 edit-icon"
+                              onClick={() => handleEdit(author)}
+                            />
+                            <FaTrash
+                              className="text-danger delete-icon"
+                              onClick={() => handleDelete(author.author_id)}
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
-                    
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+          )}
+
+          {/* Pagination */}
+          <div className="d-flex justify-content-center mt-4">
+            <Pagination>
+              {Array.from({ length: totalPages }, (_, index) => (
+                <Pagination.Item
+                  key={index}
+                  active={index + 1 === currentPage}
+                  onClick={() => handlePaginationClick(index + 1)}
+                >
+                  {index + 1}
+                </Pagination.Item>
+              ))}
+            </Pagination>
           </div>
+        </div>
+
+        {/* Delete confirmation modal */}
+        <DeleteConfirmation
+          show={showDeleteModal}
+          handleClose={() => setShowDeleteModal(false)}
+          handleConfirm={handleConfirmDelete}
+        />
+
+        {/* Edit author offcanvas */}
+        {authorToEdit && (
+          <Offcanvas show={true} onHide={handleCloseEditOffcanvas} placement="end">
+            <Offcanvas.Header closeButton>
+              <Offcanvas.Title>Edit Author</Offcanvas.Title>
+            </Offcanvas.Header>
+            <Offcanvas.Body>
+              <EditAuthorForm author={authorToEdit} onClose={handleCloseEditOffcanvas} />
+            </Offcanvas.Body>
+          </Offcanvas>
         )}
-      </div>
-      
 
-      {/* Delete confirmation modal */}
-      <DeleteConfirmation
-        show={showDeleteModal}
-        handleClose={() => setShowDeleteModal(false)}
-        handleConfirm={handleConfirmDelete}
-      />
-
-      {/* Edit author offcanvas */}
-      {authorToEdit && (
-        <Offcanvas show={true} onHide={handleCloseEditOffcanvas} placement="end">
-          <Offcanvas.Header closeButton>
-            <Offcanvas.Title>Edit Author</Offcanvas.Title>
-          </Offcanvas.Header>
-          <Offcanvas.Body>
-            <EditAuthorForm author={authorToEdit} onClose={handleCloseEditOffcanvas} />
-          </Offcanvas.Body>
-        </Offcanvas>
-      )}
-
-      {/* Floating action button to add new author */}
-      <Link to="/add-author" className="fab">
-        <FaPlus className="fab-icon" />
-      </Link>
+        {/* Floating action button to add new author */}
+        <Link to="/add-author" className="fab">
+          <FaPlus className="fab-icon" />
+        </Link>
       </div>
       <footer className="footer bg-dark text-white text-center py-3">
         <p>&copy; 2024 Bookstore. All rights reserved.</p>
@@ -166,6 +209,4 @@ function AuthorsPage() {
   );
 }
 
-
 export default AuthorsPage;
-

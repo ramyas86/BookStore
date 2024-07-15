@@ -3,6 +3,7 @@
 /* Container for the authors page */
 .authors-page-container {
   padding-top: 20px;
+  min-height: 520px;
 }
 
 /* Styles for each author card */

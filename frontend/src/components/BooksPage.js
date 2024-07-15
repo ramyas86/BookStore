@@ -8,7 +8,7 @@ import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
 import './BooksPage.css'; // Import the CSS file for styling
 import DeleteConfirmation from './DeleteConfirmation'; // Import the DeleteConfirmation component
 import EditBookForm from './EditBookForm'; // Import the EditBookForm component
-import { Offcanvas } from 'react-bootstrap';
+import { Offcanvas, Pagination } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function BooksPage() {
@@ -19,6 +19,7 @@ function BooksPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [bookToDelete, setBookToDelete] = useState(null);
   const [bookToEdit, setBookToEdit] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Fetch books from API on component mount
   useEffect(() => {
@@ -75,6 +76,20 @@ function BooksPage() {
   // Determine books to display (search results or all books)
   const displayBooks = searchResults ? searchResults : books;
 
+  // Pagination variables
+  const itemsPerPage = 6;
+  const totalPages = Math.ceil(displayBooks.length / itemsPerPage);
+
+  // Pagination click handler
+  const handlePaginationClick = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  // Calculate current authors to display based on pagination
+  const indexOfLastAuthor = currentPage * itemsPerPage;
+  const indexOfFirstAuthor = indexOfLastAuthor - itemsPerPage;
+  const currentBooks = displayBooks.slice(indexOfFirstAuthor, indexOfLastAuthor);
+
   return (
     <>
       <CustomNavbar />
@@ -88,12 +103,12 @@ function BooksPage() {
         {loading && <p>Loading...</p>}
 
         {/* Render no books message */}
-        {!loading && displayBooks.length === 0 && <p>No books found.</p>}
+        {!loading && currentBooks.length === 0 && <p>No books found.</p>}
 
         {/* Render books */}
-        {!loading && displayBooks.length > 0 && (
+        {!loading && currentBooks.length > 0 && (
           <div className="row row-cols-1 row-cols-md-3 g-4">
-            {displayBooks.map((book) => (
+            {currentBooks.map((book) => (
               <div key={book.book_id} className="col mb-3">
                 <div className="card" style={{height: '100% !important'}}>
                   <div className="row g-0 h-100">
@@ -129,6 +144,20 @@ function BooksPage() {
           </div>
         )}
       </div>
+      {/* Pagination */}
+      <div className="d-flex justify-content-center mt-4">
+            <Pagination>
+              {Array.from({ length: totalPages }, (_, index) => (
+                <Pagination.Item
+                  key={index}
+                  active={index + 1 === currentPage}
+                  onClick={() => handlePaginationClick(index + 1)}
+                >
+                  {index + 1}
+                </Pagination.Item>
+              ))}
+            </Pagination>
+          </div>
 
       {/* Delete confirmation modal */}
       <DeleteConfirmation

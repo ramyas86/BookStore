@@ -54,7 +54,7 @@ const AddAuthorForm = () => {
             <img src={add_image} alt="Add a Book" className="img-fluid" />
           </div>
         <div className="col-md-6 authors-page-container">
-          <form onSubmit={handleSubmit} style={{height: '100%'}}>
+          <form onSubmit={handleSubmit} style={{height: '95%'}}>
             <div className="mb-3">
               <label htmlFor="name" className="form-label">Name</label>
               <input

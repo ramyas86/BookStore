@@ -2,7 +2,6 @@ const Book = require('../models/book');
 const Author = require('../models/author');
 const Genre = require('../models/genre');
 const { Op } = require('sequelize');
-const formatName = require('../utils/formatName');
 
 exports.getBooks = async (req, res) => {
   try {

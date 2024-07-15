@@ -3,6 +3,7 @@
 /* Container for the books page */
 .books-page-container {
   padding-top: 20px;
+  min-height: 520px;
 }
 
 /* Styles for each book card */
@@ -88,7 +89,7 @@
   position: relative;
   text-align: center;
   bottom: 0;
-  margin-top: 120px;
+  margin-top: 50px;
 }
 
 /* Media queries for responsive design */

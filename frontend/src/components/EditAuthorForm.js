@@ -3,6 +3,8 @@ import { updateAuthor } from '../api';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 const EditAuthorForm = ({ author, onClose }) => {
   const [formData, setFormData] = useState({
@@ -108,6 +110,7 @@ const EditAuthorForm = ({ author, onClose }) => {
             <div className="mt-3">
               <img src={imagePreview} alt="Author Preview" style={{ maxWidth: '100%' }} />
               <button type="button" className="btn btn-danger mt-2" onClick={handleRemoveImage}>
+              <FontAwesomeIcon icon={faTrash} className="me-2" />
                 Remove Image
               </button>
             </div>
@@ -116,11 +119,13 @@ const EditAuthorForm = ({ author, onClose }) => {
         <div className="row justify-content-center mt-4">
           <div className="col-auto">
             <button type="submit" className="btn btn-primary">
+            <FontAwesomeIcon icon={faSave} className="me-2" />
               Save Changes
             </button>
           </div>
           <div className="col-auto">
             <button type="button" className="btn btn-secondary" onClick={handleCancel}>
+            <FontAwesomeIcon icon={faTimes} className="me-2" />
               Cancel
             </button>
           </div>
