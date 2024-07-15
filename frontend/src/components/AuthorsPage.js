@@ -189,7 +189,7 @@ function AuthorsPage() {
         {authorToEdit && (
           <Offcanvas show={true} onHide={handleCloseEditOffcanvas} placement="end">
             <Offcanvas.Header closeButton>
-              <Offcanvas.Title>Edit Author</Offcanvas.Title>
+              <Offcanvas.Title className='OffcanvasTitle'>Edit Author</Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
               <EditAuthorForm author={authorToEdit} onClose={handleCloseEditOffcanvas} />

@@ -3,9 +3,12 @@ import { addAuthor } from '../api';
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { BsPlusCircleFill, BsXCircleFill } from 'react-icons/bs'; // Import icons
 import add_image from './images/addAuthor.jpg';
 import './AddAuthorForm.css';
 import CustomNavbar from './Navbar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
 
 const AddAuthorForm = () => {
   const [name, setName] = useState('');
@@ -48,7 +51,8 @@ const AddAuthorForm = () => {
     <CustomNavbar />
     
     <div className="container my-3">
-      <h2 className="text-center mb-4">Add New Author</h2>
+    <h2 style={{ textAlign: 'center', margin: '20px 0', fontWeight: 'bold', color: '#333' }}>Add New Author</h2>
+
       <div className="row">
       <div className="col-md-6">
             <img src={add_image} alt="Add a Book" className="img-fluid" />
@@ -98,8 +102,8 @@ const AddAuthorForm = () => {
           )}
         </div>
             <div className="text-center">
-              <button type="submit" className="btn btn-primary mx-2">Add Author</button>
-              <button type="button" className="btn btn-secondary mx-2" onClick={handleCancel}>Cancel</button>
+              <button type="submit" className="btn btn-primary mx-2"><FontAwesomeIcon icon={faUserPlus} className="mr-2" /> Add Author</button>
+              <button type="button" className="btn btn-secondary mx-2" onClick={handleCancel}><BsXCircleFill className="mb-1" /> Cancel</button>
             </div>
           </form>
         </div>

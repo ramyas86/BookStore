@@ -3,9 +3,13 @@ import { addBook, addGenre, getAuthors, getGenres } from '../api';
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { BsXCircleFill } from 'react-icons/bs'; // Import cancel icon
+import { BiPlus } from 'react-icons/bi'; // Import add book and new genre icons
 import './AddBookForm.css'; // Import the CSS file
 import add_image from './images/addBook.jpg';
 import CustomNavbar from './Navbar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBook } from '@fortawesome/free-solid-svg-icons';
 
 const AddBookForm = () => {
   const [authors, setAuthors] = useState([]);
@@ -18,7 +22,6 @@ const AddBookForm = () => {
   const [newGenre, setNewGenre] = useState('');
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-  // const [imagePath, setImagePath] = useState('');
   const navigate = useNavigate();
 
   const handleAddGenre = async (e) => {
@@ -57,31 +60,8 @@ const AddBookForm = () => {
     setImagePreview(URL.createObjectURL(file));
   };
 
-  // const handleFileUpload = async () => {
-  //   try {
-  //     const formData = new FormData();
-  //     formData.append('file', imageFile);
-
-  //     const response = await fetch('/upload/image', {
-  //       method: 'POST',
-  //       body: formData
-  //     });
-
-  //     const data = await response.json();
-  //     setImagePath(data.path); // Assuming the response returns the path
-  //     toast.success('Image uploaded successfully!');
-  //   } catch (error) {
-  //     console.error('Error uploading image:', error);
-  //     toast.error('Error uploading image. Please try again.');
-  //   }
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // if (imageFile) {
-    //   await handleFileUpload();
-    // }
 
     try {
       await addBook({ title, author_id: authorId, genre_id: genreId, price, publication_date: publicationDate, book_image:(imageFile ? imageFile : "") });
@@ -94,11 +74,9 @@ const AddBookForm = () => {
       setPublicationDate('');
       setImageFile(null);
       setImagePreview(null);
-      // setImagePath('');
     } catch (error) {
       console.error('Error adding book:', error);
       toast.error('Error adding book. Please try again.');
-      // Handle error state or display error message
     }
   };
 
@@ -110,7 +88,8 @@ const AddBookForm = () => {
     <>
       <CustomNavbar />
       <div className="container add-book-container">
-        <h2 style={{textAlign: 'center'}}>Add New Book</h2>
+      <h2 style={{ textAlign: 'center', margin: '20px 0', fontWeight: 'bold', color: '#333' }}>Add New Book</h2>
+
         <div className="row">
           <div className="col-md-6 mt-4">
             <img src={add_image} alt="Add a Book" className="img-fluid imgcss" />
@@ -175,7 +154,7 @@ const AddBookForm = () => {
                     type="button"
                     onClick={handleAddGenre}
                   >
-                    Add Genre
+                    <BiPlus className="mb-1" /> Add Genre
                   </button>
                 </div>
               </div>
@@ -217,8 +196,8 @@ const AddBookForm = () => {
                   </div>
                 )}
               </div>
-              <button type="submit" className="btn btn-primary">Add Book</button>
-              <button type="button" className="btn btn-secondary mx-2" onClick={handleCancel}>Cancel</button>
+              <button type="submit" className="btn btn-primary"><FontAwesomeIcon icon={faBook} className="me-1" /> Add Book</button>
+              <button type="button" className="btn btn-secondary mx-2" onClick={handleCancel}><BsXCircleFill className="mb-1" /> Cancel</button>
             </form>
           </div>
         </div>

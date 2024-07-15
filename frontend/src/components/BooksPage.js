@@ -170,7 +170,7 @@ function BooksPage() {
       {bookToEdit && (
         <Offcanvas show={true} onHide={handleCloseEditOffcanvas} placement="end">
           <Offcanvas.Header closeButton>
-            <Offcanvas.Title>Edit Book</Offcanvas.Title>
+            <Offcanvas.Title className='OffcanvasTitleBook'>Edit Book</Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
             <EditBookForm book={bookToEdit} onClose={handleCloseEditOffcanvas} />
