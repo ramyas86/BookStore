@@ -1,31 +1,28 @@
 /* AuthorsPage.css */
 
-/* Style for the container */
+/* Container for the authors page */
 .authors-page-container {
-  padding: 20px;
+  padding-top: 20px;
 }
 
-/* Style for the author card */
+/* Styles for each author card */
 .card {
   border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: 2px;
   transition: box-shadow 0.3s ease;
-  display: flex; /* Use flexbox for layout */
-  overflow: hidden; /* Prevent overflow issues */
+  display: flex;
+  flex-direction: column;
 }
 
-.card:hover {
-  box-shadow: 0 0 11px rgba(33, 33, 33, 0.2); /* Adding a shadow on hover */
-}
-
-/* Style for the author image */
+/* Styles for the author image */
 .author-card-img {
-  width: 100px; /* Set fixed width for the image */
-  height: 100px; /* Set fixed height for the image */
-  border-radius: 50%; /* Make the image circular */
-  object-fit: cover; /* Ensure image covers the container */
+  width: 100%;
+  height: auto;
+  
+  object-fit: cover;
 }
 
+/* Styles for author initial placeholder */
 .author-initial {
   width: 100px; /* Set fixed width for the initial */
   height: 100px; /* Set fixed height for the initial */
@@ -39,12 +36,21 @@
   font-weight: bold;
 }
 
-/* Style for the card body */
+/* Center the image vertically in its column */
+.col-md-3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Styles for the card body */
 .card-body {
+  display: flex;
   flex: 1; /* Take remaining space beside the image */
-  padding: 15px;
-  display: flex; /* Use flexbox for layout */
-  flex-direction: column; /* Stack elements vertically */
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  position: relative;
 }
 
 /* Style for the card title */
@@ -60,41 +66,62 @@
   flex-grow: 1; /* Take remaining space in the column */
 }
 
-/* Edit and delete icon styling */
-.edit-icon,
-.delete-icon {
-  cursor: pointer;
-  margin-left: 10px;
+/* Styles for the edit and delete icons */
+.icon-container {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  display: flex;
+  gap: 10px;
 }
 
-/* Floating action button */
+.edit-icon, .delete-icon {
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.edit-icon {
+  color: #6c757d;
+}
+
+.delete-icon {
+  color: #dc3545;
+}
+
+/* Floating action button styles */
 .fab {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  top: 80px;
+  left: 20px;
   background-color: #007bff;
-  color: white;
+  color: #fff;
   border-radius: 50%;
-  width: 56px;
-  height: 56px;
+  width: 60px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   text-decoration: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Media query for medium screens */
-@media (max-width: 768px) {
-  .card {
-    flex-direction: column; /* Stack image and content on small screens */
-  }
+.fab-icon {
+  font-size: 1.5rem;
+}
 
-  .author-card-img,
-  .author-initial {
-    width: 100%; /* Full width for image or initial on smaller screens */
-    height: auto; /* Auto height to maintain aspect ratio */
-    border-radius: 0; /* Remove border radius */
-    margin-bottom: 10px; /* Add margin below image or initial */
+.footer {
+  background-color: #3900B3;
+  padding: 50px 0 50px 0;
+  position: relative;
+  text-align: center;
+  bottom: 0;
+  margin-top: 120px;
+}
+
+
+/* Media queries for responsive design */
+@media (min-width: 768px) {
+  .author-card-img {
+    height: 100%;
   }
 }

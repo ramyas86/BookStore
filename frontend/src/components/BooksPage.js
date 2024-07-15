@@ -63,7 +63,7 @@ function BooksPage() {
 
   // Handle edit book action
   const handleEdit = (book) => {
-    setBookToEdit(book);  // Set the selected book ID
+    setBookToEdit(book);  // Set the selected book
   };
 
   // Close edit book offcanvas
@@ -95,20 +95,20 @@ function BooksPage() {
           <div className="row row-cols-1 row-cols-md-3 g-4">
             {displayBooks.map((book) => (
               <div key={book.book_id} className="col mb-3">
-                <div className="card h-100">
-                  <div className="row g-0">
-                    <div className="col-md-4">
+                <div className="card" style={{height: '100% !important'}}>
+                  <div className="row g-0 h-100">
+                    <div className="col-md-3 d-flex align-items-center">
                       {/* Book image */}
                       <img 
-                        src={book.imagePath ? book.imagePath : process.env.PUBLIC_URL + '/images/default_book_image.jpg'} 
-                        className="img-fluid rounded-start book-card-img" 
+                        src={book.imagePath ? book.imagePath : process.env.PUBLIC_URL + '/images/default_book_image.webp'} 
+                        className="book-card-img img-fluid" 
                         alt={book.title} 
                       />
                     </div>
-                    <div className="col-md-8">
-                      <div className="card-body d-flex flex-column justify-content-between">
+                    <div className="col-md-9">
+                      <div className="card-body d-flex flex-column justify-content-between h-100">
                         {/* Book details */}
-                        <div>
+                        <div className="book-details">
                           <h5 className="card-title">{book.title}</h5>
                           <p className="card-text">Author: {book.Author.name}</p>
                           <p className="card-text">Genre: {book.Genre.genre_name}</p>
@@ -116,8 +116,8 @@ function BooksPage() {
                           <p className="card-text">Publication Date: {new Date(book.publication_date).toLocaleDateString()}</p>
                         </div>
                         {/* Edit and delete icons */}
-                        <div className="mt-auto d-flex justify-content-end">
-                          <FaEdit className="text-secondary me-2 edit-icon" onClick={() => handleEdit(book)} />
+                        <div className="icon-container">
+                          <FaEdit className="text-secondary edit-icon" onClick={() => handleEdit(book)} />
                           <FaTrash className="text-danger delete-icon" onClick={() => handleDelete(book.book_id)} />
                         </div>
                       </div>
@@ -153,6 +153,9 @@ function BooksPage() {
       <Link to="/add-book" className="fab">
         <FaPlus className="fab-icon" />
       </Link>
+      <footer className="footer bg-dark text-white text-center py-3">
+        <p>&copy; 2024 Bookstore. All rights reserved.</p>
+      </footer>
     </>
   );
 }

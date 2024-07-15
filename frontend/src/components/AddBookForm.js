@@ -41,7 +41,7 @@ const AddBookForm = () => {
       try {
         const authorsData = await getAuthors();
         const genresData = await getGenres();
-        setAuthors(authorsData.data);
+        setAuthors(authorsData.data.authors);
         setGenres(genresData.data);
       } catch (error) {
         console.error('Error fetching authors and genres:', error);
@@ -110,12 +110,12 @@ const AddBookForm = () => {
     <>
       <CustomNavbar />
       <div className="container add-book-container">
-        <h2>Add New Book</h2>
+        <h2 style={{textAlign: 'center'}}>Add New Book</h2>
         <div className="row">
           <div className="col-md-6">
             <img src={add_image} alt="Add a Book" className="img-fluid" />
           </div>
-          <div className="col-md-6">
+          <div className="col-md-6" style={{marginTop: '20px'}}>
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label htmlFor="title" className="form-label">Title</label>
@@ -221,6 +221,9 @@ const AddBookForm = () => {
           </div>
         </div>
       </div>
+      <footer className="footer bg-dark text-white text-center py-3">
+        <p>&copy; 2024 Bookstore. All rights reserved.</p>
+      </footer>
     </>
   );
 };

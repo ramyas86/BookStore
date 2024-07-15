@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { getAuthors, deleteAuthor } from '../api';
 import { toast } from 'react-toastify';
 import CustomNavbar from './Navbar';
-import SearchComponent from '../components/SearchComponent';
 import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
 import './AuthorsPage.css'; // Import the CSS file for styling
 import DeleteConfirmation from './DeleteConfirmation'; // Import the DeleteConfirmation component
@@ -78,10 +77,11 @@ function AuthorsPage() {
 
   return (
     <>
+    <div>
       <CustomNavbar />
-      <div className="search-component-container">
+      {/* <div className="search-component-container">
         <SearchComponent setSearchResults={setSearchResults} refreshAuthors={refreshAuthors} />
-      </div>
+      </div> */}
       <div className="container authors-page-container">
         <h2 className="text-center mb-4">Authors</h2>
 
@@ -96,22 +96,22 @@ function AuthorsPage() {
           <div className="row row-cols-1 row-cols-md-3 g-4">
             {displayAuthors.map((author) => (
               <div key={author.author_id} className="col mb-3">
-                <div className="card h-100">
-                  <div className="row g-0">
-                    <div className="col-md-4">
+                <div className="card h-100" style={{height: "200px !important"}}>
+                  <div className="row g-0 h-100">
+                    <div className="col-md-3 d-flex align-items-center">
                       {/* Author image */}
                       {author.imagePath ? (
                         <img
                           src={author.imagePath ? author.imagePath : process.env.PUBLIC_URL + '/images/default_author_image.jpg'}
-                          className="author-card-img rounded-circle"
+                          className="author-card-img"
                           alt={author.name} />
                       ) : (
-                        <div className="author-initial rounded-circle">
-                          {author.name.charAt(0)}
+                        <div className="author-initial">
+                          {author.name.slice(0,2).toUpperCase()}
                         </div>
                       )}
                     </div>
-                    <div className="col-md-8">
+                    <div className="col-md-9">
                       <div className="card-body d-flex flex-column justify-content-between">
                         {/* Author details */}
                         <div>
@@ -119,12 +119,13 @@ function AuthorsPage() {
                           <p className="card-text">Biography: {author.biography}</p>
                         </div>
                         {/* Edit and delete icons */}
-                        <div className="mt-auto d-flex justify-content-end">
+                        <div className="icon-container">
                           <FaEdit className="text-secondary me-2 edit-icon" onClick={() => handleEdit(author)} />
                           <FaTrash className="text-danger delete-icon" onClick={() => handleDelete(author.author_id)} />
                         </div>
                       </div>
                     </div>
+                    
                   </div>
                 </div>
               </div>
@@ -132,6 +133,7 @@ function AuthorsPage() {
           </div>
         )}
       </div>
+      
 
       {/* Delete confirmation modal */}
       <DeleteConfirmation
@@ -156,9 +158,14 @@ function AuthorsPage() {
       <Link to="/add-author" className="fab">
         <FaPlus className="fab-icon" />
       </Link>
+      </div>
+      <footer className="footer bg-dark text-white text-center py-3">
+        <p>&copy; 2024 Bookstore. All rights reserved.</p>
+      </footer>
     </>
   );
 }
+
 
 export default AuthorsPage;
 

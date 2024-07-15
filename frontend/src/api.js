@@ -10,7 +10,7 @@ const api = await axios.create({
 })
 
 export const updateBook = (id, formData) => {
-    return axios.put(`${API_BASE_URL}/books/${id}`, formData, {
+    return api.put(`/books/${id}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -32,8 +32,25 @@ export const deleteBook = (id) => api.delete(`/books/${id}`);
 
 export const getAuthors = (selectedLetter, currentPage) => api.get(`/authors`, { params: { letter : selectedLetter} });
 export const getAuthorById = (id) => api.get(`/authors/${id}`);
-export const addAuthor = (author) => api.post(`/authors`, author);
-export const updateAuthor = (id, author) => api.put(`/authors/${id}`, author);
+// export const addAuthor = (author) => api.post(`/authors`, author);
+
+export const addAuthor = (formData) => {
+  return api.post(`/authors`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};
+// export const updateAuthor = (id, author) => api.put(`/authors/${id}`, author);
+
+export const updateAuthor = (id, formData) => {
+  return api.put(`/authors/${id}`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};
+
 export const deleteAuthor = (id) => api.delete(`/authors/${id}`);
 
 export const getGenres = () => api.get(`/genres`);

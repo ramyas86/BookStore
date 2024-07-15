@@ -3,17 +3,21 @@ import { addAuthor } from '../api';
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import add_image from './images/addAuthor.jpg';
 import './AddAuthorForm.css';
+import CustomNavbar from './Navbar';
 
 const AddAuthorForm = () => {
   const [name, setName] = useState('');
   const [biography, setBiography] = useState('');
   const navigate = useNavigate();
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await addAuthor({ name, biography });
+      await addAuthor({ name, biography, author_image: imageFile });
       navigate("/authors");
       toast.success('Author added successfully!');
       setName('');
@@ -24,16 +28,33 @@ const AddAuthorForm = () => {
     }
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file));
+  };
+
+  const handleRemoveImage = () => {
+    setImageFile(null); // Clear the image file
+    setImagePreview(null); // Clear the image preview
+  };
+
   const handleCancel = () => {
     navigate('/authors'); // Redirect to /authors when cancel button is clicked
   };
 
   return (
+    <>
+    <CustomNavbar />
+    
     <div className="container my-3">
       <h2 className="text-center mb-4">Add New Author</h2>
-      <div className="row justify-content-center">
-        <div className="col-md-8">
-          <form onSubmit={handleSubmit}>
+      <div className="row">
+      <div className="col-md-6">
+            <img src={add_image} alt="Add a Book" className="img-fluid" />
+          </div>
+        <div className="col-md-6 authors-page-container">
+          <form onSubmit={handleSubmit} style={{height: '100%'}}>
             <div className="mb-3">
               <label htmlFor="name" className="form-label">Name</label>
               <input
@@ -55,6 +76,25 @@ const AddAuthorForm = () => {
                 rows="5"
               ></textarea>
             </div>
+            <div className="mb-3">
+          <label htmlFor="author_image" className="form-label">Author Image</label>
+          <input
+            type="file"
+            className="form-control"
+            id="author_image"
+            name="author_image"
+            accept="image/*"
+            onChange={handleFileChange}
+          />
+          {imagePreview && (
+            <div className="mt-3">
+              <img src={imagePreview} alt="Author Preview" style={{ maxWidth: '100%' }} />
+              <button type="button" className="btn btn-danger mt-2" onClick={handleRemoveImage}>
+              Remove Image
+              </button>
+            </div>
+          )}
+        </div>
             <div className="text-center">
               <button type="submit" className="btn btn-primary mx-2">Add Author</button>
               <button type="button" className="btn btn-secondary mx-2" onClick={handleCancel}>Cancel</button>
@@ -63,6 +103,10 @@ const AddAuthorForm = () => {
         </div>
       </div>
     </div>
+    <footer className="footer bg-dark text-white text-center py-3">
+        <p>&copy; 2024 Bookstore. All rights reserved.</p>
+      </footer>
+    </>
   );
 };
 

@@ -51,6 +51,7 @@ const EditAuthorForm = ({ author, onClose }) => {
     for (let key in updatedAuthorData) {
       formDataToSend.append(key, updatedAuthorData[key]);
     }
+    console.log(imageFile);
     if (imageFile) {
       formDataToSend.append('author_image', imageFile);
     } else if (removeImage) {

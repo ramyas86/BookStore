@@ -52,7 +52,10 @@ router.put('/authors/:author_id', upload.single('author_image'), async (req, res
         if (req.file) {
             req.body.imagePath = `http://localhost:3001/uploads/authors/${req.file.filename}`;
         }
-
+        if(req.body.remove_image) {
+            req.body.imagePath = null;
+          }
+      
         const [updated] = await Author.update(req.body, {
             where: { author_id: req.params.author_id }
         });

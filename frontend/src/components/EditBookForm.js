@@ -24,7 +24,7 @@ const EditBookForm = ({ book, onClose }) => {
     const fetchAuthors = async () => {
       try {
         const response = await getAuthors();
-        setAuthors(response.data);
+        setAuthors(response.data.authors);
       } catch (error) {
         console.error('Error fetching authors:', error);
       }
