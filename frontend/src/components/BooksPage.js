@@ -90,6 +90,20 @@ function BooksPage() {
   const indexOfFirstAuthor = indexOfLastAuthor - itemsPerPage;
   const currentBooks = displayBooks.slice(indexOfFirstAuthor, indexOfLastAuthor);
 
+  // Handle next button click
+  const handleNextClick = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  // Handle previous button click
+  const handlePreviousClick = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
   return (
     <>
       <CustomNavbar />
@@ -146,18 +160,20 @@ function BooksPage() {
       </div>
       {/* Pagination */}
       <div className="paginate">
-            <Pagination>
-              {Array.from({ length: totalPages }, (_, index) => (
-                <Pagination.Item
-                  key={index}
-                  active={index + 1 === currentPage}
-                  onClick={() => handlePaginationClick(index + 1)}
-                >
-                  {index + 1}
-                </Pagination.Item>
-              ))}
-            </Pagination>
-          </div>
+        <Pagination>
+          <Pagination.Prev onClick={handlePreviousClick} disabled={currentPage === 1} />
+          {Array.from({ length: totalPages }, (_, index) => (
+            <Pagination.Item
+              key={index}
+              active={index + 1 === currentPage}
+              onClick={() => handlePaginationClick(index + 1)}
+            >
+              {index + 1}
+            </Pagination.Item>
+          ))}
+          <Pagination.Next onClick={handleNextClick} disabled={currentPage === totalPages} />
+        </Pagination>
+      </div>
 
       {/* Delete confirmation modal */}
       <DeleteConfirmation

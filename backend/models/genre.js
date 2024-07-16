@@ -10,6 +10,9 @@ const Genre = sequelize.define('Genre', {
   genre_name: {
     type: DataTypes.STRING,
     allowNull: false,
+    unique: {
+      msg: 'Genre name must be unique'
+    },
     validate: {
       notEmpty: {
         msg: 'Genre name cannot be empty'

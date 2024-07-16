@@ -100,3 +100,4 @@ npm install --save react-responsive
 npm install @fortawesome/fontawesome-svg-core @fortawesome/free-solid-svg-icons @fortawesome/react-fontawesome
 npm install react-icons --save
 npm install @fortawesome/fontawesome-free
+

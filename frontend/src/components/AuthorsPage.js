@@ -12,22 +12,20 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import AlphabetFilter from './AlphabetFilter';
 
 function AuthorsPage() {
-  // State variables
   const [authors, setAuthors] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchResults, setSearchResults] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [authorToDelete, setAuthorToDelete] = useState(null);
   const [authorToEdit, setAuthorToEdit] = useState(null);
   const [selectedLetter, setSelectedLetter] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
+  let gotoLastPage = false;
 
-  // Fetch authors from API on component mount
   useEffect(() => {
     refreshAuthors();
   }, []);
 
-  // Function to fetch authors
   const refreshAuthors = async (selectedLetter) => {
     setLoading(true);
     try {
@@ -41,34 +39,35 @@ function AuthorsPage() {
     }
   };
 
-  // Handle delete author action
   const handleDelete = (id) => {
     setAuthorToDelete(id);
     setShowDeleteModal(true);
   };
 
-  // Confirm author deletion
   const handleConfirmDelete = async () => {
     try {
       await deleteAuthor(authorToDelete);
-      setAuthors(authors.filter((author) => author.author_id !== authorToDelete));
+      const updatedAuthors = authors.filter((author) => author.author_id !== authorToDelete);
+      const totalPages = Math.ceil(updatedAuthors.length / itemsPerPage);
+      if (currentPage > totalPages) {
+        setCurrentPage(currentPage - 1);
+      }
+      setAuthors(updatedAuthors);
       toast.success('Author deleted successfully!');
       setShowDeleteModal(false);
       setAuthorToDelete(null);
     } catch (error) {
       console.error('Error deleting author:', error);
-      toast.error('Error deleting author. Please try again.');
+      toast.error(error.response.data.error ? error.response.data.error : 'Error deleting author. Please try again.');
       setShowDeleteModal(false);
       setAuthorToDelete(null);
     }
   };
 
-  // Handle edit author action
   const handleEdit = (author) => {
     setAuthorToEdit(author);
   };
 
-  // Close edit author offcanvas
   const handleCloseEditOffcanvas = () => {
     setAuthorToEdit(null);
     refreshAuthors();
@@ -79,19 +78,26 @@ function AuthorsPage() {
     refreshAuthors(letter);
   };
 
-  // Determine authors to display (search results or all authors)
-  const displayAuthors = searchResults ? searchResults : authors;
+  const displayAuthors = authors;
 
-  // Pagination variables
-  const itemsPerPage = 6;
   const totalPages = Math.ceil(displayAuthors.length / itemsPerPage);
 
-  // Pagination click handler
   const handlePaginationClick = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  // Calculate current authors to display based on pagination
+  const handlePreviousClick = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextClick = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
   const indexOfLastAuthor = currentPage * itemsPerPage;
   const indexOfFirstAuthor = indexOfLastAuthor - itemsPerPage;
   const currentAuthors = displayAuthors.slice(indexOfFirstAuthor, indexOfLastAuthor);
@@ -104,13 +110,8 @@ function AuthorsPage() {
           <h2 className="text-center mb-4">Authors</h2>
           <AlphabetFilter selectedLetter={selectedLetter} onSelectLetter={filterAuthor} />
           {selectedLetter && <p style={{ textAlign: 'center', fontWeight: 'lighter' }}>Authors starting with <b>{selectedLetter}</b></p>}
-          {/* Render loading message */}
           {loading && <p>Loading...</p>}
-
-          {/* Render no authors message */}
           {!loading && currentAuthors.length === 0 && <p>No authors found.</p>}
-
-          {/* Render authors */}
           {!loading && currentAuthors.length > 0 && (
             <div className="row row-cols-1 row-cols-md-3 g-4">
               {currentAuthors.map((author) => (
@@ -118,7 +119,6 @@ function AuthorsPage() {
                   <div className="card">
                     <div className="row g-0 h-100">
                       <div className="col-md-4 d-flex align-items-center">
-                        {/* Author image */}
                         {author.imagePath ? (
                           <img
                             src={
@@ -137,12 +137,10 @@ function AuthorsPage() {
                       </div>
                       <div className="col-md-8">
                         <div className="card-body d-flex flex-column justify-content-between">
-                          {/* Author details */}
                           <div>
                             <h5 className="card-title">{author.name}</h5>
                             <p className="card-text">Biography: {author.biography}</p>
                           </div>
-                          {/* Edit and delete icons */}
                           <div className="icons-container">
                             <FaEdit
                               className="text-secondary me-2 edit-icon"
@@ -162,9 +160,9 @@ function AuthorsPage() {
             </div>
           )}
 
-          {/* Pagination */}
           <div className="paginate">
             <Pagination>
+              <Pagination.Prev onClick={handlePreviousClick} disabled={currentPage === 1} />
               {Array.from({ length: totalPages }, (_, index) => (
                 <Pagination.Item
                   key={index}
@@ -174,18 +172,17 @@ function AuthorsPage() {
                   {index + 1}
                 </Pagination.Item>
               ))}
+              <Pagination.Next onClick={handleNextClick} disabled={currentPage === totalPages} />
             </Pagination>
           </div>
         </div>
 
-        {/* Delete confirmation modal */}
         <DeleteConfirmation
           show={showDeleteModal}
           handleClose={() => setShowDeleteModal(false)}
           handleConfirm={handleConfirmDelete}
         />
 
-        {/* Edit author offcanvas */}
         {authorToEdit && (
           <Offcanvas show={true} onHide={handleCloseEditOffcanvas} placement="end">
             <Offcanvas.Header closeButton>
@@ -197,7 +194,6 @@ function AuthorsPage() {
           </Offcanvas>
         )}
 
-        {/* Floating action button to add new author */}
         <Link to="/add-author" className="fab">
           <FaPlus className="fab-icon" />
         </Link>

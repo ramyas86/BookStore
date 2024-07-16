@@ -3,7 +3,7 @@ import { addAuthor } from '../api';
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { BsPlusCircleFill, BsXCircleFill } from 'react-icons/bs'; // Import icons
+import { BsXCircleFill } from 'react-icons/bs'; // Import icons
 import add_image from './images/addAuthor.jpg';
 import './AddAuthorForm.css';
 import CustomNavbar from './Navbar';
@@ -109,9 +109,9 @@ const AddAuthorForm = () => {
         </div>
       </div>
     </div>
-    <footer className="footer bg-dark text-white text-center py-3">
+    {/* <footer className="footer bg-dark text-white text-center py-3">
         <p>&copy; 2024 Bookstore. All rights reserved.</p>
-      </footer>
+      </footer> */}
     </>
   );
 };
